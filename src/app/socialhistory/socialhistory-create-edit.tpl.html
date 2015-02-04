@@ -1,0 +1,67 @@
+<div id="socialhistory-form">
+    <form novalidate class="form-horizontal field-height" name="socialhistoryForm" >
+
+        <div class="form-group">
+            <label class="col-sm-6 control-label no-padding-right" for="socialHistoryTypeCode"> Name </label>
+            <div class="col-sm-6">
+                    <select ng-model="socialhistory.socialHistoryTypeCode" name="socialHistoryTypeCode" id="socialHistoryTypeCode" required="true">
+                        <option value="">-- Choose Social History --</option>
+                        <option ng-repeat="s in socialhistoryTypeCodes" value="{{s.code}}" ng-selected="s.code == socialhistory.socialHistoryTypeCode">{{s.displayName}}</option>
+                    </select>
+                    <span ng-show="showErrorOnCreate(socialhistoryForm.socialHistoryTypeCode, 'required')" class="patient-form-error">This field is required</span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-6 control-label no-padding-right" for="socialHistoryStatusCode"> Status </label>
+            <div class="col-sm-6">
+                    <select ng-model="socialhistory.socialHistoryStatusCode" name="socialHistoryStatusCode" id="socialHistoryStatusCode">
+                        <option value="">-- Choose Status Code --</option>
+                        <option ng-repeat="s in problemStatusCodes" value="{{s.code}}" ng-selected="s.code == socialhistory.socialHistoryStatusCode">{{s.displayName}}</option>
+                    </select>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-6 control-label no-padding-right" for="startDate"> Start Date </label>
+            <div class="col-sm-6">
+                <input type="text"  ng-pattern="datePattern" datepicker ng-model="socialhistory.startDate" id="startDate" name="startDate" placeholder="MM/DD/YYYY"/>
+                <span ng-show="socialhistoryForm.startDate.$error['pattern']" class="patient-form-error">Invalid date</span>
+                <span ng-show="showStartDateError" class="patient-form-error">Date should not be in the future</span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-6 control-label no-padding-right" for="startDate"> End Date </label>
+            <div class="col-sm-6">
+                <input type="text"  ng-pattern="datePattern" datepicker ng-model="socialhistory.endDate" id="endDate" name="endDate" placeholder="MM/DD/YYYY"/>
+                <span ng-show="socialhistoryForm.endDate.$error['pattern']" class="patient-form-error">Invalid date</span>
+                <span ng-show="showEndDateError" class="patient-form-error">Date should not be in the future</span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-6 control-label no-padding-right" > </label>
+            <div class="col-sm-6">
+                <span ng-show="endDateBeforeStartDate" class="patient-form-error"> End date cannot precede start date</span>
+            </div>
+        <div>
+
+        <div class="clearfix form-actions">
+            <div class="col-sm-6 control-label no-padding-right no-padding-top">
+                <a class="btn" href="#/patient/{{selectedPatientId}}/socialhistories">
+                    <i class="icon-arrow-left bigger-110"></i>
+                    Back
+                </a>
+            </div>
+            <div class="col-sm-6">
+                <a class="btn btn-info" type="button" ng-click="save(socialhistory)" ng-disabled="!canSave()">
+                    <i class="icon-ok bigger-110"></i>
+                    Submit
+                </a>
+            </div>
+        </div>
+
+    </form>
+</div>
+

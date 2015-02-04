@@ -1,0 +1,127 @@
+<div class="row">
+    <div class="col-xs-12">
+        <div class="table-responsive">
+            <div class="table-header">
+                &nbsp;
+            </div>
+            <div class="modal-footer no-margin-top">
+                <div class="col-sm-3 ">
+                    <div class="dataTables_info pull-left no-margi">
+                        <label>
+                            Display
+                            <select size="1" ng-model="pageSize" ng-change="onPageSizeChange()">
+                                <option value="10">10</option>
+                                <option value="25">25</option>
+                                <option value="50">50</option>
+                                <option value="100">100</option>
+                            </select>
+                            Records
+                        </label>
+
+                    </div>
+                </div>
+                <div class="col-sm-9">
+                    <div class="visible-md visible-lg hidden-sm hidden-xs action-buttons field-height">
+                        <label> Add Social History</label> &nbsp;
+                        <a class="blue" href="#/patient/{{selectedPatientId}}/socialhistories/add">
+                            <i class="icon-plus-sign purple bigger-130"></i>
+                        </a>
+                        <span > | </span>
+                        <label>Search Social History</label> &nbsp;&nbsp;
+                        <select size="1" ng-model="searchBy" ng-change="onSearch()" >
+                            <option value="">-- All columns --</option>
+                            <option value="name">Name</option>
+                            <option value="status">Status</option>
+                        </select> <input type="text" name="search" ng-model="criteria" ng-change="onSearch()" placeholder="Search table" size="15"/>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-body no-padding" >
+                <table id="socialhistories-table" class="table table-striped table-bordered table-hover no-bottom-margin">
+                    <thead>
+                    <tr>
+                        <th ng-click="sort('socialHistoryTypeName')">
+                            Name  &nbsp;<i ng-class="{'icon-chevron-up': isSortUp('socialHistoryTypeName'), 'icon-chevron-down': isSortDown('socialHistoryTypeName')}"></i>
+                        </th>
+                        <th ng-click="sort('socialHistoryStatusCode')">
+                            Status &nbsp;<i ng-class="{'icon-chevron-up': isSortUp('socialHistoryStatusCode'), 'icon-chevron-down': isSortDown('socialHistoryStatusCode')}"></i>
+                        </th>
+                        <th ng-click="sort('startDate')">
+                            Start Date &nbsp; <i ng-class="{'icon-chevron-up': isSortUp('startDate'), 'icon-chevron-down': isSortDown('startDate')}"></i>
+                        </th>
+                        <th ng-click="sort('endDate')">
+                            End Date &nbsp; <i ng-class="{'icon-chevron-up': isSortUp('endDate'), 'icon-chevron-down': isSortDown('endDate')}"></i>
+                        </th>
+                        <th >Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-show="filteredsocialhistories.length == 0">
+                        <td colspan="5" class="center"> No Social History found </td>
+                    </tr>
+                    <tr ng-repeat="socialhistory in filteredsocialhistories = ( socialhistories |filter:composedCriteria | orderBy:natural(sortField):reverse  ) | pagination:pageNo:pageSize" ng-hide="noRecords">
+                        <td>{{ socialhistory.socialHistoryTypeName }}</td>
+                        <td>{{ socialhistory.socialHistoryStatusCode}}</td>
+                        <td>{{ socialhistory.startDate}}</td>
+                        <td>{{ socialhistory.endDate }}</td>
+                        <td>
+                            <div class="visible-md visible-lg hidden-sm hidden-xs action-buttons">
+
+                                <show-socialhistory socialhistory="socialhistory"  ></show-socialhistory>
+                                <a class="green" href="#/patient/{{selectedPatientId}}/socialhistories/edit/{{socialhistory.id}}">
+                                    <i class="icon-pencil bigger-130"></i>
+                                </a>
+                                <delete-socialhistory socialhistoryid="{{ socialhistory.id }}" name="{{ socialhistory.socialHistoryTypeName }}" ondelete="deleteSocialhistory(socialhistoryId)"></delete-socialhistory>
+
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <div class="modal-footer no-margin-top">
+                    <div class="col-sm-6">
+                         <span ng-show="filteredsocialhistories.length > 0 " >
+                            <div class="dataTables_info pull-left no-margi"> Showing {{startRecord}} to {{showPageSize}} of {{filteredsocialhistories.length}} Conditions </div>
+                         </span>
+                    </div>
+                    <div class="col-sm-6">
+                        <span ng-show="filteredsocialhistories.length > 0 " >
+                            <ul class="pagination pull-right no-margin pagination-highlight">
+                                <li class="prev" >
+                                    <a ng-click="setActivePage(firstPage)">
+                                        <i class="icon-double-angle-left"></i>
+                                    </a>
+                                </li>
+
+                                <li ng-repeat="page in pages" ng-class="{'active': page==pageNo}">
+                                    <a ng-click="setActivePage(page)" >{{page+1}}</a>
+                                </li>
+
+                                <li class="next" >
+                                    <a ng-click="setActivePage(lastPage-1)">
+                                        <i class="icon-double-angle-right"></i>
+                                    </a>
+                                </li>
+                            </ul>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="dialog-confirm" class="hide">
+    <div class="alert alert-info bigger-110">
+        <span id="dialog-confirm-msg"></span>
+    </div>
+    <div class="space-6"></div>
+    <p class="bigger-110 bolder center grey">
+        <i class="icon-hand-right blue bigger-120"></i>
+        Are you sure?
+    </p>
+</div>
+
+
+<div id="dialog-socialhistory-details" class="hide">
+</div>

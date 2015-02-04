@@ -1,0 +1,70 @@
+<div id="condition-form">
+    <form novalidate class="form-horizontal field-height" name="conditionForm" >
+
+        <div class="form-group">
+            <label class="col-sm-6 control-label no-padding-right" for="conditionCode"> Name </label>
+            <div class="col-sm-6">
+                    <select ng-model="condition.problemCode" name="conditionCode" id="conditionCode" required="true">
+                        <option value="">-- Choose Condition --</option>
+                        <option ng-repeat="s in problems" value="{{s.code}}" ng-selected="s.code == condition.problemCode">{{s.displayName}}</option>
+                    </select>
+                    <span ng-show="showErrorOnCreate(conditionForm.conditionCode, 'required')" class="patient-form-error">This field is required</span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-6 control-label no-padding-right" for="problemStatusCode"> Status </label>
+            <div class="col-sm-6">
+                    <select ng-model="condition.problemStatusCode" name="problemStatusCode" id="problemStatusCode">
+                        <option value="">-- Choose Status Code --</option>
+                        <option ng-repeat="s in problemStatusCodes" value="{{s.code}}" ng-selected="s.code == condition.problemStatusCode">{{s.displayName}}</option>
+                    </select>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-6 control-label no-padding-right" for="startDate"> Start Date </label>
+            <div class="col-sm-6">
+                <input type="text"  ng-pattern="datePattern" datepicker ng-model="condition.startDate" id="startDate" name="startDate" placeholder="MM/DD/YYYY"/>
+                <!--<span ng-hide="conditionForm.startDate.$valid" class="patient-form-error">Invalid date</span>-->
+                <span ng-show="conditionForm.startDate.$error['pattern']" class="patient-form-error">Invalid date</span>
+
+                <span ng-show="showStartDateError" class="patient-form-error">Date should not be in the future</span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-6 control-label no-padding-right" for="startDate"> End Date </label>
+            <div class="col-sm-6">
+                <input type="text"  ng-pattern="datePattern" datepicker ng-model="condition.endDate" id="endDate" name="endDate" placeholder="MM/DD/YYYY"/>
+                <span ng-show="conditionForm.endDate.$error['pattern']" class="patient-form-error">Invalid date</span>
+                <span ng-show="showEndDateError" class="patient-form-error">Date should not be in the future</span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-6 control-label no-padding-right" > </label>
+            <div class="col-sm-6">
+                <span ng-show="endDateBeforeStartDate" class="patient-form-error"> End date cannot precede start date</span>
+            </div>
+        <div>
+
+        <div class="clearfix form-actions">
+            <div class="col-sm-6 control-label no-padding-right no-padding-top">
+                <a class="btn" href="#/patient/{{selectedPatientId}}/conditions">
+                    <i class="icon-arrow-left bigger-110"></i>
+                    Back
+                </a>
+
+            </div>
+            <div class="col-sm-6">
+                <a class="btn btn-info" type="button" ng-click="save(condition)" ng-disabled="!canSave()">
+                    <i class="icon-ok bigger-110"></i>
+                    Submit
+                </a>
+            </div>
+        </div>
+            <!--<pre > {{toJSON(conditionForm)}}</pre>-->
+    </form>
+</div>
+

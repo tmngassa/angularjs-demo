@@ -1,0 +1,82 @@
+<div id="add-procedure-form">
+    <form novalidate class="form-horizontal field-height" name="procedureForm">
+        <div class="form-group">
+            <label class="col-sm-6 control-label no-padding-right" for="procedureTypeCode"> Name </label>
+
+            <div class="col-sm-6">
+                <select ng-model="procedure.procedureTypeCode" name="procedureTypeCode" id="procedureTypeCode"
+                        required="true">
+                    <option value="">-- Choose Procedure --</option>
+                    <option ng-repeat="s in procedureCodes" value="{{s.code}}"
+                            ng-selected="s.code == procedure.procedureTypeCode">{{s.displayName}}
+                    </option>
+                </select>
+                    <span ng-show="showErrorOnCreate(procedureForm.procedureTypeCode, 'required')"
+                          class="patient-form-error">This field is required</span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-6 control-label no-padding-right" for="procedureStatusCode"> Status </label>
+
+            <div class="col-sm-6">
+                    <select ng-model="procedure.procedureStatusCode" name="procedureStatusCode"
+                            id="procedureStatusCode">
+                        <option value="">-- Choose Status Code --</option>
+                        <option ng-repeat="s in procedureStatusCodes" value="{{s.code}}"
+                                ng-selected="s.code == procedure.procedureStatusCode">{{s.displayName}}
+                        </option>
+                    </select>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-6 control-label no-padding-right" for="procedureStartDate"> Start Date </label>
+
+            <div class="col-sm-6">
+                <input type="text"
+                       ng-pattern="datePattern" datepicker
+                       ng-model="procedure.procedureStartDate" id="procedureStartDate" name="procedureStartDate"
+                       placeholder="MM/DD/YYYY"/>
+                <span ng-show="procedureForm.procedureStartDate.$error['pattern']" class="patient-form-error">Invalid date</span>
+                <span ng-show="showStartDateError" class="patient-form-error">Date should not be in the future</span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-6 control-label no-padding-right" for="procedureEndDate"> End Date </label>
+
+            <div class="col-sm-6">
+                <input type="text"
+                       ng-pattern="datePattern" datepicker
+                       ng-model="procedure.procedureEndDate" id="procedureEndDate" name="procedureEndDate"
+                       placeholder="MM/DD/YYYY"/>
+                <span ng-show="procedureForm.procedureEndDate.$error['pattern']" class="patient-form-error">Invalid date</span>
+                <span ng-show="showEndDateError" class="patient-form-error">Date should not be in the future</span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-6 control-label no-padding-right" > </label>
+            <div class="col-sm-6">
+                <span ng-show="endDateBeforeStartDate" class="patient-form-error"> End date cannot precede start date</span>
+            </div>
+        <div>
+
+        <div class="clearfix form-actions">
+            <div class="col-sm-6 control-label no-padding-right no-padding-top">
+                <a class="btn" href="#/patient/{{selectedPatientId}}/procedures">
+                    <i class="icon-arrow-left bigger-110"></i>
+                    Back
+                </a>
+            </div>
+
+            <div class="col-sm-6">
+                <a class="btn btn-info" type="button" ng-click="save(procedure)" ng-disabled="!canSave()">
+                    <i class="icon-ok bigger-110"></i>
+                    Submit
+                </a>
+            </div>
+        </div>
+    </form>
+</div>

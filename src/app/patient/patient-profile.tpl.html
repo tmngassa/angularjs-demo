@@ -1,0 +1,173 @@
+
+<!-- Start accordion -->
+<div id="accordion" class="accordion-style1 panel-group">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h4 class="panel-title">
+                <a class="accordion-toggle"   data-toggle="collapse" data-parent="#accordion" ng-click="onDemographicsClick()" >
+                    <i class=" bigger-110" ng-class="{'icon-angle-right': toggleDemographicsClass, 'icon-angle-down': !toggleDemographicsClass}" data-icon-hide="icon-angle-down" data-icon-show="icon-angle-right"></i>
+                    &nbsp;Demographics
+                </a>
+            </h4>
+        </div>
+
+        <div class="panel-collapse {{collapseDemographics}}" >
+            <div class="panel-body">
+                <div class="row"> <!-- Begin Demographics table-->
+                    <div class="col-xs-12">
+                        <div class="table-responsive">
+                            <!--<div class="table-header"> Demographics </div>-->
+                            <div class="modal-body no-padding" >
+                                <table class="table table-striped table-bordered table-hover no-bottom-margin">
+                                    <thead >
+                                    <tr > <th class="table-header"> Name </th> <th class="table-header"> Gender </th> <th class="table-header"> Race </th> <th class="table-header"> DOB </th> <th class="table-header"> Zipcode </th> <th class="table-header"> State </th> </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr > <td> {{selectedPatient.fullName}}</td> <td> {{selectedPatient.administrativeGenderCodeDisplayName}} </td> <td> {{selectedPatient.raceCodeDisplayName}} </td> <td> {{selectedPatient.birthDate}} </td> <td> {{selectedPatient.addressPostalCode}} </td> <td> {{selectedPatient.addressStateCode}} </td> </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div><!-- End Demographics table-->
+            </div>
+        </div>
+    </div>
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h4 class="panel-title">
+                <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion"  ng-click="onConditionsClick()">
+                    <i class=" bigger-110" ng-class="{'icon-angle-right': toggleConditionsClass, 'icon-angle-down': !toggleConditionsClass}" data-icon-hide="icon-angle-down" data-icon-show="icon-angle-right"></i>
+                    &nbsp;Conditions
+                </a>
+            </h4>
+        </div>
+
+        <div class="panel-collapse {{collapseConditions }}" id="collapseTwo">
+            <div class="panel-body">
+                <div class="row"> <!-- Begin Condition table-->
+                    <div class="col-xs-12">
+                        <div class="table-responsive">
+                            <table id="conditions-table" class="table table-striped table-bordered table-hover no-bottom-margin">
+                                <thead>
+                                <tr>
+                                    <th class="table-header treatmentplans-table-name-width" >Name &nbsp;</th>
+                                    <th class="table-header treatmentplans-table-status-column-width" >Status &nbsp;</th>
+                                    <th class="table-header treatmentplans-table-date-column-width" >Start Date &nbsp;</th>
+                                    <th class="table-header treatmentplans-table-date-column-width" >End Date &nbsp;</th>
+                                    <th class="table-header"> Infobutton</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr ng-show="noCondition">
+                                    <td colspan="5" class="center"> No Condition found </td>
+                                </tr>
+                                <tr ng-repeat="condition in conditions" ng-hide="noCondition">
+                                    <td>{{ condition.problemDisplayName }}</td>
+                                    <td>{{ condition.problemStatusCode}}</td>
+                                    <td>{{ condition.startDate}}</td>
+                                    <td>{{ condition.endDate }}</td>
+                                    <td class="center">
+                                        <a class="grey" href="http://www.nlm.nih.gov/medlineplus/drugabuse.html" target="_blank">
+                                            <i class="icon-info-sign bigger-130"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div><!-- End Condition table-->
+            </div>
+        </div>
+    </div>
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h4 class="panel-title">
+                <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion" ng-click="onSocialHistoryClick()">
+                    <i class="bigger-110" ng-class="{'icon-angle-right': toggleSocialhistoryClass, 'icon-angle-down': !toggleSocialhistoryClass}" data-icon-hide="icon-angle-down" data-icon-show="icon-angle-right"></i>
+                    &nbsp;Social History
+                </a>
+            </h4>
+        </div>
+
+        <div class="panel-collapse {{collapseSocialhistory}}" >
+            <div class="panel-body">
+                <table id="socialhistories-table" class="table table-striped table-bordered table-hover no-bottom-margin">
+                    <thead>
+                    <tr>
+                        <th class="table-header treatmentplans-table-name-width" >Name &nbsp;</th>
+                        <th class="table-header treatmentplans-table-status-column-width" >Status &nbsp;</th>
+                        <th class="table-header treatmentplans-table-date-column-width" >Start Date &nbsp;</th>
+                        <th class="table-header treatmentplans-table-date-column-width" >End Date &nbsp;</th>
+                        <th class="table-header"> Infobutton</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-show="noSocialHistory">
+                        <td colspan="5" class="center"> No Social History found </td>
+                    </tr>
+                    <tr ng-repeat="socialhistory in socialhistories" ng-hide="noSocialHistory">
+                        <td>{{ socialhistory.socialHistoryTypeName }}</td>
+                        <td>{{ socialhistory.socialHistoryStatusCode}}</td>
+                        <td>{{ socialhistory.startDate}}</td>
+                        <td>{{ socialhistory.endDate }}</td>
+                        <td class="center">
+                            <a class="grey" href="http://www.nlm.nih.gov/medlineplus/drugabuse.html" target="_blank">
+                                <i class="icon-info-sign bigger-130"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table><!-- End Social History table-->
+            </div>
+        </div>
+    </div>
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h4 class="panel-title">
+                <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion" ng-click="onProcedureClick()">
+                    <i class="bigger-110" ng-class="{'icon-angle-right': toggleProcedureClass, 'icon-angle-down': !toggleProcedureClass}" data-icon-hide="icon-angle-down" data-icon-show="icon-angle-right"></i>
+                    &nbsp;Procedure
+                </a>
+            </h4>
+        </div>
+
+        <div class="panel-collapse {{collapseProcedure}}" >
+            <div class="panel-body">
+                <table id="sample-table-1" class="table table-striped table-bordered table-hover no-bottom-margin">
+                    <thead>
+                    <tr>
+                        <th class="table-header treatmentplans-table-name-width" >Name &nbsp;</th>
+                        <th class="table-header treatmentplans-table-status-column-width" >Status &nbsp;</th>
+                        <th class="table-header treatmentplans-table-date-column-width" >Start Date &nbsp;</th>
+                        <th class="table-header treatmentplans-table-date-column-width" >End Date &nbsp;</th>
+                        <th class="table-header"> Infobutton</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-show="noProcedure">
+                        <td colspan="5" class="center"> No Procedure found </td>
+                    </tr>
+                    <tr ng-repeat="procedure in procedures" ng-hide="noProcedure">
+                        <td>{{ procedure.procedureTypeName }}</td>
+                        <td>{{ procedure.procedureStatusCode}}</td>
+                        <td>{{ procedure.procedureStartDate}}</td>
+                        <td>{{ procedure.procedureEndDate }}</td>
+                        <td class="center">
+                            <a class="grey" href="http://www.nlm.nih.gov/medlineplus/drugabuse.html" target="_blank">
+                                <i class="icon-info-sign bigger-130"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table><!-- End Procedure table-->
+
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End accordion -->

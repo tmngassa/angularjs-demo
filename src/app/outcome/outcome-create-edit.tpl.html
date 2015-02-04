@@ -1,0 +1,105 @@
+<div id="outcome-form">
+    <form novalidate class="form-horizontal field-height" name="outcomeForm">
+
+        <div class="form-group">
+            <label class="col-sm-6 control-label no-padding-right" for="startDate"> Start Date </label>
+
+            <div class="col-sm-6">
+                <input type="text" ng-pattern="datePattern" datepicker ng-model="outcome.startDate" id="startDate"
+                       name="startDate" placeholder="MM/DD/YYYY"/>
+                <span ng-show="outcomeForm.startDate.$error['pattern']" class="patient-form-error">Invalid date</span>
+                <span ng-show="showStartDateError" class="patient-form-error">Date should not be in the future</span>
+                <span ng-show="showErrorOnCreate(outcomeForm.outcomeCode, 'required')" class="patient-form-error">This field is required</span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-6 control-label no-padding-right" for="endDate"> End Date </label>
+
+            <div class="col-sm-6">
+                <input type="text" ng-pattern="datePattern" datepicker ng-model="outcome.endDate" id="endDate"
+                       name="endDate" placeholder="MM/DD/YYYY"/>
+                <span ng-show="outcomeForm.endDate.$error['pattern']" class="patient-form-error">Invalid date</span>
+                <span ng-show="showEndDateError" class="patient-form-error">Date should not be in the future</span>
+                <span ng-show="showErrorOnCreate(outcomeForm.outcomeCode, 'required')" class="patient-form-error">This field is required</span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-6 control-label no-padding-right" for="symptoms"> Symptoms </label>
+
+            <div class="col-sm-6">
+                <input type="text" ng-model="outcome.symptoms" ng-minlength="2" id="symptoms" ng-maxlength="30" required
+                       name="symptoms" placeholder="Symptoms"/>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-6 control-label no-padding-right" for="symptoms"> Tolerability </label>
+
+            <div class="col-sm-6">
+                <input type="text" ng-model="outcome.tolerability" ng-minlength="2" id="tolerability" ng-maxlength="30"
+                       required name="tolerability" placeholder="Tolerability"/>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-6 control-label no-padding-right" for="procedureCode"> Procedures </label>
+
+            <div class="col-sm-6">
+                <select ng-model="outcome.procedureTypeCode" name="procedureCode" id="procedureCode" required="true">
+                    <option value="">-- Choose Procedure --</option>
+                    <option ng-repeat="s in procedureTypeCodes" value="{{s.code}}"
+                            ng-selected="s.code == outcome.procedureTypeCode">{{s.displayName}}
+                    </option>
+                </select>
+                <span ng-show="showErrorOnCreate(outcomeForm.procedureCode, 'required')" class="patient-form-error">This field is required</span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-6 control-label no-padding-right" for="cgiSCode"> CGI-S </label>
+
+            <div class="col-sm-6">
+                <select ng-model="outcome.cgiSCode" name="cgiSCode" id="cgiSCode" required="true">
+                    <option value="">-- Choose CGI-S --</option>
+                    <option ng-repeat="s in cgiSCodes" value="{{s.code}}" ng-selected="s.code == outcome.cgiSCode">
+                        {{s.code}} - {{s.displayName}}
+                    </option>
+                </select>
+                <span ng-show="showErrorOnCreate(outcomeForm.cgiSCode, 'required')" class="patient-form-error">This field is required</span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-6 control-label no-padding-right" for="cgiICode"> CGI-I </label>
+
+            <div class="col-sm-6">
+                <select ng-model="outcome.cgiICode" name="cgiICode" id="cgiICode" required="true">
+                    <option value="">-- Choose CGI-I --</option>
+                    <option ng-repeat="s in cgiICodes" value="{{s.code}}" ng-selected="s.code == outcome.cgiICode">
+                        {{s.code}} - {{s.displayName}}
+                    </option>
+                </select>
+                <span ng-show="showErrorOnCreate(outcomeForm.cgiICode, 'required')" class="patient-form-error">This field is required</span>
+            </div>
+        </div>
+
+        <div class="clearfix form-actions">
+            <div class="col-sm-6 control-label no-padding-right no-padding-top">
+                <a class="btn" href="#/patient/{{selectedPatientId}}/outcomes">
+                    <i class="icon-arrow-left bigger-110"></i>
+                    Back
+                </a>
+
+            </div>
+            <div class="col-sm-6">
+                <a class="btn btn-info" type="button" ng-click="save(outcome)" ng-disabled="!canSave()">
+                    <i class="icon-ok bigger-110"></i>
+                    Submit
+                </a>
+            </div>
+        </div>
+    </form>
+</div>
+

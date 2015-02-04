@@ -1,0 +1,167 @@
+<div class="row">
+    <div class="col-xs-12">
+        <div class="table-responsive">
+            <div class="table-header">
+                &nbsp;
+            </div>
+            <div class="modal-footer no-margin-top">
+                <div class="col-sm-3 ">
+                    <div class="dataTables_info pull-left no-margi">
+                        <label>
+                            Display
+                            <select size="1" ng-model="pageSize" ng-change="onPageSizeChange()">
+                                <option value="10">10</option>
+                                <option value="25">25</option>
+                                <option value="50">50</option>
+                                <option value="100">100</option>
+                            </select>
+                            Records
+                        </label>
+
+                    </div>
+                </div>
+                <div class="col-sm-9">
+                    <div class="visible-md visible-lg hidden-sm hidden-xs action-buttons field-height">
+                        <label> Add outcome</label> &nbsp;
+                        <a class="blue" href="#/patient/{{selectedPatientId}}/outcomes/add">
+                            <i class="icon-plus-sign purple bigger-130"></i>
+                        </a>
+                        <span> | </span>
+                        <label>Search outcomes</label> &nbsp;&nbsp;
+                        <input type="text" name="search" ng-model="criteria" ng-change="onSearch()"
+                               placeholder="Search table" size="15"/>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-body no-padding">
+                <table id="outcomes-table" class="table table-striped table-bordered table-hover no-bottom-margin">
+                    <thead>
+                    <tr>
+                        <th ng-click="sort('startDate')">
+                            Start Date &nbsp;<i
+                                ng-class="{'icon-chevron-up': isSortUp('startDate'), 'icon-chevron-down': isSortDown('startDate')}"></i>
+                        </th>
+                        <th ng-click="sort('endDate')">
+                            End Date &nbsp;<i
+                                ng-class="{'icon-chevron-up': isSortUp('endDate'), 'icon-chevron-down': isSortDown('endDate')}"></i>
+                        </th>
+                        <th ng-click="sort('symptoms')">
+                            Symptoms &nbsp;<i
+                                ng-class="{'icon-chevron-up': isSortUp('symptoms'), 'icon-chevron-down': isSortDown('symptoms')}"></i>
+                        </th>
+                        <th ng-click="sort('tolerability')">
+                            Tolerability &nbsp; <i
+                                ng-class="{'icon-chevron-up': isSortUp('tolerability'), 'icon-chevron-down': isSortDown('tolerability')}"></i>
+                        </th>
+                        <th ng-click="sort('procedureTypeName')">
+                            Procedures &nbsp; <i
+                                ng-class="{'icon-chevron-up': isSortUp('procedureTypeName'), 'icon-chevron-down': isSortDown('procedureTypeName')}"></i>
+                        </th>
+                        <th ng-click="sort('cgiSCode')">
+                            CGI-S &nbsp; <i
+                                ng-class="{'icon-chevron-up': isSortUp('cgiSCode'), 'icon-chevron-down': isSortDown('cgiSCode')}"></i>
+                        </th>
+                        <th ng-click="sort('cgiICode')">
+                            CGI-I &nbsp; <i
+                                ng-class="{'icon-chevron-up': isSortUp('cgiICode'), 'icon-chevron-down': isSortDown('cgiICode')}"></i>
+                        </th>
+                        <th>Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-show="filteredOutcomes.length == 0 ">
+                        <td colspan="5" class="center"> No Outcome found</td>
+                    </tr>
+                    <tr ng-repeat="outcome in filteredOutcomes = ( outcomes | filter:composedCriteria | orderBy:natural(sortField):reverse  )  | pagination:pageNo:pageSize"
+                        ng-hide="noRecords">
+                        <td>{{ outcome.startDate }}</td>
+                        <td>{{ outcome.endDate }}</td>
+                        <td>{{ outcome.symptoms}}</td>
+                        <td>{{ outcome.tolerability}}</td>
+                        <td>{{ outcome.procedureTypeName }}</td>
+                        <td>{{ outcome.cgiSCode }}</td>
+                        <td>{{ outcome.cgiICode }}</td>
+                        <td>
+                            <div class="visible-md visible-lg hidden-sm hidden-xs action-buttons">
+
+                                <show-outcome outcome="outcome"></show-outcome>
+                                <a class="green" href="#/patient/{{selectedPatientId}}/outcomes/edit/{{outcome.id}}">
+                                    <i class="icon-pencil bigger-130"></i>
+                                </a>
+                                <delete-outcome outcomeid="{{ outcome.id }}" name="{{ outcome.visitDate }}"
+                                                ondelete="deleteOutcome(outcomeId)"></delete-outcome>
+
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <div class="modal-footer no-margin-top">
+                    <div class="col-sm-6">
+                         <span ng-show="filteredOutcomes.length > 0 ">
+                            <div class="dataTables_info pull-left no-margi"> Showing {{startRecord}} to {{showPageSize}}
+                                of {{filteredOutcomes.length}} Outcomes
+                            </div>
+                         </span>
+                    </div>
+                    <div class="col-sm-6">
+                        <span ng-show="filteredOutcomes.length > 0 ">
+                            <ul class="pagination pull-right no-margin pagination-highlight">
+                                <li class="prev">
+                                    <a ng-click="setActivePage(firstPage)">
+                                        <i class="icon-double-angle-left"></i>
+                                    </a>
+                                </li>
+
+                                <li ng-repeat="page in pages" ng-class="{'active': page==pageNo}">
+                                    <a ng-click="setActivePage(page)">{{page+1}}</a>
+                                </li>
+
+                                <li class="next">
+                                    <a ng-click="setActivePage(lastPage-1)">
+                                        <i class="icon-double-angle-right"></i>
+                                    </a>
+                                </li>
+                            </ul>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="dialog-confirm" class="hide">
+    <div class="alert alert-info bigger-110">
+        <span id="dialog-confirm-msg"></span>
+    </div>
+    <div class="space-6"></div>
+    <p class="bigger-110 bolder center grey">
+        <i class="icon-hand-right blue bigger-120"></i>
+        Are you sure?
+    </p>
+</div>
+
+
+<div id="dialog-outcome-details" class="hide">
+</div>
+
+<div ng-controller="ExampleCtrl">
+    <nvd3-line-chart
+            data="exampleData"
+            showXAxis="true"
+            xAxisTickFormat="xAxisTickFormatFunction()"
+            showYAxis="true"
+            tooltips="true"
+            height="400"
+            useInteractiveGuideLine="true"
+            showLegend="true"
+            >
+    </nvd3-line-chart>
+</div>
+
+
+
+
+
+

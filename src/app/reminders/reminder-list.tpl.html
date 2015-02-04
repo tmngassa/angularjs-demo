@@ -1,0 +1,121 @@
+<div class="row" >
+    <div class="col-xs-12">
+        <div class="table-responsive">
+            <div class="table-header">
+               &nbsp;
+            </div>
+            <div class="modal-footer no-margin-top" >
+                <div class="col-sm-3 " >
+                    <div class="dataTables_info pull-left no-margi" >
+                        <label>
+                            Display
+                            <select size="1" ng-model="pageSize" ng-change="onPageSizeChange()">
+                                <option value="10">10</option>
+                                <option value="25">25</option>
+                                <option value="50">50</option>
+                                <option value="100">100</option>
+                            </select>
+                            Reminders
+                        </label>
+                    </div>
+                </div>
+                <div class="col-sm-9">
+                    <div class="visible-md visible-lg hidden-sm hidden-xs action-buttons field-height">
+                            <label>Search Reminders</label> &nbsp;&nbsp;
+                            <select size="1" ng-model="searchBy" ng-change="onSearch()" >
+                                <option value="">-- All columns --</option>
+                                <option value="subject">Subject</option>
+                                <option value="patient">Patient</option>
+                                <option value="messageType">Message</option>
+                            </select>
+                            <input type="text" name="search" ng-model="criteria" ng-change="onSearch()" placeholder="Search table" size="15"/>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-body no-padding" >
+                <table id="sample-table-1" class="table table-striped table-bordered table-hover no-bottom-margin">
+                    <thead>
+                    <tr>
+                        <th ng-click="sort('date')">
+                            Date  &nbsp;<i ng-class="{'icon-chevron-up': isSortUp('date'), 'icon-chevron-down': isSortDown('date')}"></i>
+                        </th>
+                        <th ng-click="sort('from')">
+                            From &nbsp;<i ng-class="{'icon-chevron-up': isSortUp('from'), 'icon-chevron-down': isSortDown('from')}"></i>
+                        </th>
+                        <th ng-click="sort('subject')">
+                            Subject &nbsp; <i ng-class="{'icon-chevron-up': isSortUp('subject'), 'icon-chevron-down': isSortDown('subject')}"></i>
+                        </th>
+                        <th ng-click="sort('patient')">
+                            Patient &nbsp; <i ng-class="{'icon-chevron-up': isSortUp('patient'), 'icon-chevron-down': isSortDown('patient')}"></i>
+                        </th>
+                        <th ng-click="sort('messageType')">
+                            Message Type &nbsp; <i ng-class="{'icon-chevron-up': isSortUp('messageType'), 'icon-chevron-down': isSortDown('messageType')}"></i>
+                        </th>
+                        <th ng-click="sort('priority')">
+                            Pririoty &nbsp; <i ng-class="{'icon-chevron-up': isSortUp('priority'), 'icon-chevron-down': isSortDown('priority')}"></i>
+                        </th>
+                        <th ng-click="sort('status')">
+                            Status &nbsp;<i ng-class="{'icon-chevron-up': isSortUp('status'), 'icon-chevron-down': isSortDown('status')}"></i>
+                        </th>
+                        <th >Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="reminder in filteredReminders = ( reminders |filter:composedCriteria | orderBy:natural(sortField):reverse )  | pagination:pageNo:pageSize">
+                        <td>
+                            {{ reminder.date }}
+                        </td>
+                        <td>
+                            {{ reminder.from}}
+                        </td>
+                        <td> {{ reminder.subject}}</td>
+                        <td> {{ reminder.patient }} </td>
+                        <td> {{ reminder.messageType }}</td>
+                        <td> {{ reminder.priority }}</td>
+                        <td> {{ reminder.status }}</td>
+                        <td>
+                            <div class="visible-md visible-lg hidden-sm hidden-xs action-buttons">
+                                <a class="blue" href="#/reminder/{{reminder.id}}/recommendations">
+                                    <i class="icon-zoom-in bigger-130"></i>
+                                    open
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr ng-show="filteredReminders.length == 0">
+                        <td colspan="8" class="center"> No Patient found </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <div class="modal-footer no-margin-top"  >
+                    <div class="col-sm-6" >
+                         <span ng-show="filteredReminders.length > 0 " >
+                            <div class="dataTables_info pull-left no-margi"> Showing {{startRecord}} to {{showPageSize}} of {{filteredReminders.length}} Patients </div>
+                         </span>
+                    </div>
+                    <div class="col-sm-6">
+                        <span ng-show="filteredReminders.length > 0" >
+                            <ul class="pagination pull-right no-margin pagination-highlight">
+                                <li class="prev" >
+                                    <a ng-click="setActivePage(firstPage)">
+                                        <i class="icon-double-angle-left"></i>
+                                    </a>
+                                </li>
+
+                                <li ng-repeat="page in pages" ng-class="{'active': page==pageNo}">
+                                    <a ng-click="setActivePage(page)" >{{page+1}}</a>
+                                </li>
+
+                                <li class="next" >
+                                    <a ng-click="setActivePage(lastPage-1)">
+                                        <i class="icon-double-angle-right"></i>
+                                    </a>
+                                </li>
+                            </ul>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div><!-- #Patients list table-->

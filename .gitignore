@@ -1,0 +1,11 @@
+*.sw*
+*~
+target
+node_modules/
+vendor/
+.idea
+.README.md.html
+.classpath
+.project
+.settings
+build

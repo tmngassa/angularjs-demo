@@ -1,0 +1,102 @@
+
+@invalidColor: red;
+
+@tableBorderMargin: 0;
+
+@highlight-border-color: #307ecc;
+@highlight-border-width : 3px;
+@highlight-border-style : solid;
+
+@rightAlign: right;
+@leftAlign: left;
+
+@infrontZ-Index: 9999;
+@behindZ-Index: 99999999;
+
+@statusWidth: 20%;
+@nameWidth: 25%;
+@dateWidth: 20;
+
+@searchHeight: 31px;
+
+.no-bottom-margin {
+  margin-bottom: @tableBorderMargin;
+}
+
+.captionID {
+  text-align: @rightAlign;
+}
+
+.dataID {
+  text-align: @leftAlign;
+}
+
+.common-form-error {
+  color: @invalidColor;
+}
+
+.patient-form-error {
+  color: @invalidColor;
+}
+
+.highlight{
+  border: @highlight-border-color  @highlight-border-width @highlight-border-style;
+}
+
+.behind {
+  position:relative;
+  z-index: behindZ-Index
+}
+
+.infront {
+  position:relative;
+  z-index: @infrontZ-Index
+}
+
+.treatmentplans-table-name-width{
+  width:@nameWidth;
+}
+
+.treatmentplans-table-date-column-width{
+  width:@dateWidth;
+}
+
+.treatmentplans-table-status-column-width{
+  width:@statusWidth;
+}
+
+.showProfileMenu{
+  display: block;
+}
+
+.hideProfileMenu{
+  display: none;
+}
+
+//Ensures that all the input and select fields have the same height
+.field-height select, .field-height input {
+   height: @searchHeight;
+ }
+
+.formValidation{
+
+  input {
+    //    border-color: none;
+    //    border-style: solid;
+  }
+
+  input[required].ng-pristine.ng-invalid {
+    border-left-width: 6px;
+    border-color: #e74c3c;
+  }
+
+  input.ng-invalid.ng-dirty {
+    border-left-width: 6px;
+    border-color:#e74c3c;
+  }
+  input.ng-valid.ng-dirty {
+    border-left-width: 6px;
+    border-color: #2ecc71;
+  }
+
+}

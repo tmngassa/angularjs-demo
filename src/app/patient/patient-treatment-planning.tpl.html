@@ -1,0 +1,563 @@
+<style>
+    .axis path,
+    .axis line {
+        fill: none;
+        stroke: #000;
+        shape-rendering: crispEdges;
+    }
+
+    .bar {
+        fill: steelblue;
+    }
+
+    .x.axis path {
+        display: none;
+    }
+
+    #service-chart svg {
+        height: 300px;
+    }
+</style>
+
+<div class="row-fluid">
+    <div class="span12">
+        <div class="widget-box">
+            <div class="widget-header widget-header-blue widget-header-flat">
+                <h4 class="lighter">Treatment Planning  Wizard</h4>
+
+                <div class="widget-toolbar">
+                    <label>
+                        <small class="green">
+                            <b>Decision Support</b>
+                        </small>
+
+                        <input id="skip-validation" type="checkbox" class="ace ace-switch ace-switch-4"/>
+                        <span class="lbl"></span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="widget-body">
+                    <div class="widget-main">
+                            <div id="fuelux-wizard" class="row-fluid" data-target="#step-container">
+                                <ul class="wizard-steps">
+                                    <li data-target="#step1" class="{{one}}">
+                                        <span class="step">1</span>
+                                        <span class="title">Summary Care Record</span>
+                                    </li>
+
+                                    <li data-target="#step2" class="{{two}}">
+                                        <span class="step">2</span>
+                                        <span class="title">Goals</span>
+                                    </li>
+
+                                    <li data-target="#step3" class="{{three}}">
+                                        <span class="step">3</span>
+                                        <span class="title">Objectives</span>
+                                    </li>
+
+                                    <li data-target="#step4" class="{{four}}">
+                                        <span class="step">4</span>
+                                        <span class="title">Interventions</span>
+                                    </li>
+                                </ul>
+                            </div>
+
+                    <hr/>
+
+                        <div class="step-content row-fluid position-relative" id="step-container">
+                            <div ng-switch="getCurrentStep()" ng-animate="'wave'" class="slide-frame">
+
+                                        <!-- Summary Care Records -->
+
+                                        <div  ng-switch-when="one" class="step-pane" ng-class="one" id="step1">
+                                            <div class="left"> <!-- Begin Step 1 Content-->
+                                                <div class="center">
+                                                    <h3 class="blue lighter">Please review patient's care summary record</h3>
+                                                </div>
+                                                <br/>
+
+                                                <!-- Start accordion -->
+                                                <div id="accordion" class="accordion-style1 panel-group">
+                                                    <div class="panel panel-default">
+                                                        <div class="panel-heading">
+                                                            <h4 class="panel-title">
+                                                                <a class="accordion-toggle"   data-toggle="collapse" data-parent="#accordion" ng-click="onToggledDemographicsAccordion()" >
+                                                                    <i class=" bigger-110" ng-class="{'icon-angle-right': toggleDemographicsAccordionClass, 'icon-angle-down': !toggleDemographicsAccordionClass}" data-icon-hide="icon-angle-down" data-icon-show="icon-angle-right"></i>
+                                                                    &nbsp;Demographics
+                                                                </a>
+                                                            </h4>
+                                                        </div>
+
+                                                        <div class="panel-collapse {{collapseDemographicsAccordion}}" >
+                                                            <div class="panel-body">
+                                                                <div class="row"> <!-- Begin Demographics table-->
+                                                                    <div class="col-xs-12">
+                                                                        <div class="table-responsive">
+                                                                            <!--<div class="table-header"> Demographics </div>-->
+                                                                            <div class="modal-body no-padding" >
+                                                                                <table class="table table-striped table-bordered table-hover no-bottom-margin">
+                                                                                    <thead >
+                                                                                    <tr > <th class="table-header"> Name </th> <th class="table-header"> Gender </th> <th class="table-header"> Race </th> <th class="table-header"> DOB </th> <th class="table-header"> Zipcode </th> <th class="table-header"> State </th> </tr>
+                                                                                    </thead>
+                                                                                    <tbody>
+                                                                                    <tr > <td> {{selectedPatient.fullName}}</td> <td> {{selectedPatient.administrativeGenderCodeDisplayName}} </td> <td> {{selectedPatient.raceCodeDisplayName}} </td> <td> {{selectedPatient.birthDate}} </td> <td> {{selectedPatient.addressPostalCode}} </td> <td> {{selectedPatient.addressStateCode}} </td> </tr>
+                                                                                    </tbody>
+                                                                                </table>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div><!-- End Demographics table-->
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="panel panel-default">
+                                                        <div class="panel-heading">
+                                                            <h4 class="panel-title">
+                                                                <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion"  ng-click="onToggledConditionsAccordion()">
+                                                                    <i class=" bigger-110" ng-class="{'icon-angle-right': toggleConditionsAccordionClass, 'icon-angle-down': !toggleConditionsAccordionClass}" data-icon-hide="icon-angle-down" data-icon-show="icon-angle-right"></i>
+                                                                    &nbsp;Conditions
+                                                                </a>
+                                                            </h4>
+                                                        </div>
+
+                                                        <div class="panel-collapse {{collapseConditionsAccordion }}" id="collapseTwo">
+                                                            <div class="panel-body">
+                                                                <div class="row"> <!-- Begin Condition table-->
+                                                                    <div class="col-xs-12">
+                                                                        <div class="table-responsive">
+                                                                            <table id="conditions-table" class="table table-striped table-bordered table-hover no-bottom-margin">
+                                                                                <thead>
+                                                                                <tr>
+                                                                                    <th class="table-header treatmentplans-table-name-width" >Name &nbsp;</th>
+                                                                                    <th class="table-header treatmentplans-table-status-column-width" >Status &nbsp;</th>
+                                                                                    <th class="table-header treatmentplans-table-date-column-width" >Start Date &nbsp;</th>
+                                                                                    <th class="table-header treatmentplans-table-date-column-width" >End Date &nbsp;</th>
+                                                                                    <th class="table-header"> Infobutton</th>
+                                                                                </tr>
+                                                                                </thead>
+                                                                                <tbody>
+                                                                                <tr ng-show="noCondition">
+                                                                                    <td colspan="5" class="center"> No Condition found </td>
+                                                                                </tr>
+                                                                                <tr ng-repeat="condition in conditions" ng-hide="noCondition">
+                                                                                    <td>{{ condition.problemDisplayName }}</td>
+                                                                                    <td>{{ condition.problemStatusCode}}</td>
+                                                                                    <td>{{ condition.startDate}}</td>
+                                                                                    <td>{{ condition.endDate }}</td>
+                                                                                    <td class="center">
+                                                                                        <a class="grey" href="http://www.nlm.nih.gov/medlineplus/drugabuse.html" target="_blank">
+                                                                                            <i class="icon-info-sign bigger-130"></i>
+                                                                                        </a>
+                                                                                    </td>
+                                                                                </tr>
+                                                                                </tbody>
+                                                                            </table>
+                                                                        </div>
+                                                                    </div>
+                                                                </div><!-- End Condition table-->
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="panel panel-default">
+                                                        <div class="panel-heading">
+                                                            <h4 class="panel-title">
+                                                                <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion" ng-click="onToggledSocialHistoryAccordion()">
+                                                                    <i class="bigger-110" ng-class="{'icon-angle-right': toggleSocialhistoryAccordionClass, 'icon-angle-down': !toggleSocialhistoryAccordionClass}" data-icon-hide="icon-angle-down" data-icon-show="icon-angle-right"></i>
+                                                                    &nbsp;Social History
+                                                                </a>
+                                                            </h4>
+                                                        </div>
+
+                                                        <div class="panel-collapse {{collapseSocialhistoryAccordion}}" >
+                                                            <div class="panel-body">
+                                                                <table id="socialhistories-table" class="table table-striped table-bordered table-hover no-bottom-margin">
+                                                                    <thead>
+                                                                    <tr>
+                                                                        <th class="table-header treatmentplans-table-name-width" >Name &nbsp;</th>
+                                                                        <th class="table-header treatmentplans-table-status-column-width" >Status &nbsp;</th>
+                                                                        <th class="table-header treatmentplans-table-date-column-width" >Start Date &nbsp;</th>
+                                                                        <th class="table-header treatmentplans-table-date-column-width" >End Date &nbsp;</th>
+                                                                        <th class="table-header"> Infobutton</th>
+                                                                    </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                    <tr ng-show="noSocialHistory">
+                                                                        <td colspan="5" class="center"> No Social History found </td>
+                                                                    </tr>
+                                                                    <tr ng-repeat="socialhistory in socialhistories" ng-hide="noSocialHistory">
+                                                                        <td>{{ socialhistory.socialHistoryTypeName }}</td>
+                                                                        <td>{{ socialhistory.socialHistoryStatusCode}}</td>
+                                                                        <td>{{ socialhistory.startDate}}</td>
+                                                                        <td>{{ socialhistory.endDate }}</td>
+                                                                        <td class="center">
+                                                                            <a class="grey" href="http://www.nlm.nih.gov/medlineplus/drugabuse.html" target="_blank">
+                                                                                <i class="icon-info-sign bigger-130"></i>
+                                                                            </a>
+                                                                        </td>
+                                                                    </tr>
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="panel panel-default">
+                                                        <div class="panel-heading">
+                                                            <h4 class="panel-title">
+                                                                <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion" ng-click="onToggledProcedureAccordion()">
+                                                                    <i class="bigger-110" ng-class="{'icon-angle-right': toggleProcedureAccordionClass, 'icon-angle-down': !toggleProcedureAccordionClass}" data-icon-hide="icon-angle-down" data-icon-show="icon-angle-right"></i>
+                                                                    &nbsp;Procedures
+                                                                </a>
+                                                            </h4>
+                                                        </div>
+
+                                                        <div class="panel-collapse {{collapseProcedureAccordion}}" >
+                                                            <div class="panel-body">
+                                                                <table id="sample-table-1" class="table table-striped table-bordered table-hover no-bottom-margin">
+                                                                    <thead>
+                                                                    <tr>
+                                                                        <th class="table-header treatmentplans-table-name-width" >Name &nbsp;</th>
+                                                                        <th class="table-header treatmentplans-table-status-column-width" >Status &nbsp;</th>
+                                                                        <th class="table-header treatmentplans-table-date-column-width" >Start Date &nbsp;</th>
+                                                                        <th class="table-header treatmentplans-table-date-column-width" >End Date &nbsp;</th>
+                                                                        <th class="table-header"> Infobutton</th>
+                                                                    </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                    <tr ng-show="noProcedure">
+                                                                        <td colspan="5" class="center"> No Procedure found </td>
+                                                                    </tr>
+                                                                    <tr ng-repeat="procedure in procedures" ng-hide="noProcedure">
+                                                                        <td>{{ procedure.procedureTypeName }}</td>
+                                                                        <td>{{ procedure.procedureStatusCode}}</td>
+                                                                        <td>{{ procedure.procedureStartDate}}</td>
+                                                                        <td>{{ procedure.procedureEndDate }}</td>
+                                                                        <td class="center">
+                                                                            <a class="grey" href="http://www.nlm.nih.gov/medlineplus/drugabuse.html" target="_blank">
+                                                                                <i class="icon-info-sign bigger-130"></i>
+                                                                            </a>
+                                                                        </td>
+                                                                    </tr>
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- End accordion -->
+                                        </div> <!-- End step 1 contents -->
+                                    </div>
+
+                                    <!-- Goals -->
+
+                                    <div  ng-switch-when="two" class="step-pane" ng-class="two" id="step2">
+                                        <div  class="left"> <!-- Begin Step 2 Content-->
+                                            <div class="center">
+                                                <h3 class="blue lighter">Please select short term and long term goals</h3>
+                                            </div>
+                                            <!--<h4 class="blue lighter">   Suggested short term and long term goals:</h4>-->
+
+                                            <div class="row"> <!-- Begin Goals table-->
+                                                <div class="col-xs-12">
+                                                    <div class="table-responsive">
+                                                        <div class="table-header">  Suggested short term and long term goals:  </div>
+                                                        <div class="modal-body no-padding" >
+                                                            <table class="table table-striped table-bordered table-hover no-bottom-margin ">
+                                                                <thead>
+                                                                <tr>
+                                                                    <th > <i class="icon-check"></i> </th> <th > Goals </th> <th  > Description </th> <th > Evidence </th>
+                                                                </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <tr ng-class="{highlight : longTermGoal}">
+                                                                        <td >  <input type="checkbox" ng-model="longTermGoal" > </td>
+                                                                        <td > Long term </td>
+                                                                        <td > {{goals.longTermGoal}}</td>
+                                                                        <td class="center">
+                                                                            <a class="grey" href="" ng-click="openEvidencePage()">
+                                                                                <i class="icon-file bigger-130"></i>
+                                                                            </a>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr ng-class="{highlight : shortTermGoal}">
+                                                                        <td  >  <input type="checkbox" ng-model="shortTermGoal" > </td>
+                                                                        <td > Short term </td>
+                                                                        <td> {{goals.shortTermGoal}}</td>
+                                                                        <td class="center">
+                                                                            <a class="grey" href="" ng-click="openEvidencePage()">
+                                                                                <i class="icon-file bigger-130"></i>
+                                                                            </a>
+                                                                        </td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-sm-4">
+                                                    <br/><br/>
+                                                    <div class="widget-box">
+                                                        <div class="widget-header">
+                                                            <h4>
+                                                                <i class="icon-pencil grey"></i>
+                                                                Note
+                                                            </h4>
+                                                        </div>
+                                                        <div class="widget-body">
+                                                            <div class="widget-main">
+                                                                <textarea class="form-control" ng-model="goalNote"  placeholder="Note ..."></textarea>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </div><!-- End Goals table-->
+                                        </div> <!-- End step 2 contents -->
+                                    </div>
+
+                                    <!-- Objectives -->
+
+                                    <div ng-switch-when="three" class="step-pane " ng-class="three" id="step3">
+                                        <div  class="left"> <!-- Begin Step 3 Content-->
+                                            <div class="center">
+                                                <h3 class="blue lighter">Please select objectives</h3>
+                                            </div>
+
+
+                                            <div class="row"> <!-- Begin objective table-->
+                                                <div class="col-xs-12">
+                                                    <div class="table-responsive">
+                                                        <div class="table-header"> Suggested objectives &nbsp; </div>
+                                                        <div class="modal-body no-padding" >
+                                                            <table class="table table-striped table-bordered table-hover no-bottom-margin ">
+                                                                <thead>
+                                                                <tr>
+                                                                    <th > <i class="icon-check"></i> </th> <th  > Objectives </th> <th > Evidence </th>
+                                                                </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <tr ng-class="{highlight : objective0}">
+                                                                        <td >  <input type="checkbox" ng-model="objective0" > </td>
+                                                                        <td > {{objectives[0]}} </td>
+                                                                        <td class="center">
+                                                                            <a class="grey" href="" ng-click="openEvidencePage()">
+                                                                                <i class="icon-file bigger-130"></i>
+                                                                            </a>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr ng-class="{highlight : objective1}">
+                                                                        <td>  <input type="checkbox" ng-model="objective1" > </td>
+                                                                        <td> {{objectives[1]}} </td>
+                                                                        <td class="center">
+                                                                            <a class="grey" href="" ng-click="openEvidencePage()">
+                                                                                <i class="icon-file bigger-130"></i>
+                                                                            </a>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr ng-class="{highlight : objective2}">
+                                                                        <td>  <input type="checkbox" ng-model="objective2" > </td>
+                                                                        <td> {{objectives[2]}} </td>
+                                                                        <td class="center">
+                                                                            <a class="grey" href="" ng-click="openEvidencePage()">
+                                                                                <i class="icon-file bigger-130"></i>
+                                                                            </a>
+                                                                        </td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-sm-4">
+                                                    <br/><br/>
+                                                    <div class="widget-box">
+                                                        <div class="widget-header">
+                                                            <h4>
+                                                                <i class="icon-pencil grey"></i>
+                                                                Note
+                                                            </h4>
+                                                        </div>
+                                                        <div class="widget-body">
+                                                            <div class="widget-main">
+                                                                <textarea class="form-control" ng-model="objectiveNote"  placeholder="Note ..."></textarea>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </div><!-- End objective table-->
+
+                                         </div> <!-- End step 3 contents -->
+                                    </div>
+
+                                    <!-- Intervention -->
+
+                                    <div ng-switch-when="four" class="step-pane " ng-class="four" id="step4">
+                                        <div  class="left"> <!-- Begin Step 4 Content-->
+                                            <div class="center">
+                                                <h3 class="blue">The probabilities of outcome improvement for various interventions</h3>
+                                            </div>
+                                            <br/>
+                                            <h4  class="blue lighter">The following graphic display probabilities of outcome improvement for a population of patients similar to <b>{{selectedPatient.fullName}}</b>.</h4>
+                                            <br/>
+                                            <!--<h1>-->
+                                                <div class='row-graph span12' id='service-chart' style='color: black;'>
+                                                    <svg></svg>
+                                                </div>
+                                                <script>
+                                                var json = JSON.parse('[{"key":"Suggested Treatment Interventions (in %)","color":"#87B87F","values":[{"label":"Behavioral health; short-term residential","value":34},{"label":"Alcohol and/or drug abuse halfway house services, per diem","value":15},{"label":"Behavioral health counseling and therapy, per 15 minutes","value":2},{"label":"Alcohol and/or drug services; acute detoxification (hospital inpatient)","value":0},{"label":"Alcohol and/or drug services; case management","value":49}]}]');
+
+                                                plotServices(json);
+
+                                                function plotServices(servicesJson) {
+                                                    nv.addGraph(function() {
+                                                        var chart = nv.models.multiBarHorizontalChart()
+                                                                .x(function(d) { return d.label })
+                                                                .y(function(d) { return d.value })
+                                                                .margin({top: 30, right: 20, bottom: 50, left: 400})
+                                                                .showValues(true)
+                                                                .tooltips(false)
+                                                                .showControls(false);
+                                                        chart.yAxis
+                                                                .tickFormat(d3.format(',.2f'));
+
+                                                        d3.select('#service-chart svg')
+                                                                .datum(servicesJson)
+                                                                .transition().duration(500)
+                                                                .call(chart);
+                                                        nv.utils.windowResize(chart.update);
+                                                        return chart;
+                                                    });
+                                                }
+                                                </script>
+                                            <!--</h1>-->
+                                            <br/>
+                                            <div class="center">
+                                                <h3 class="blue">Please select treatment intervention(s)</h3>
+                                            </div>
+                                            <br/>
+                                            <h4  class="blue lighter">Please discuss the treatment options with patient <b>{{selectedPatient.fullName}}</b> (You can take patient preferences into account in selecting appropriate interventions).</h4>
+                                            <br/>
+                                            <div class="row"> <!-- Begin interventions table-->
+                                                <div class="col-xs-12">
+                                                    <div class="table-responsive">
+                                                        <div class="table-header"> Suggested treatment interventions</div>
+                                                        <div class="modal-body no-padding" >
+                                                            <table class="table table-striped table-bordered table-hover no-bottom-margin ">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th > <i class="icon-check"></i> </th> <th> CPT Code </th> <th > Description </th> <th > Probability of outcome improvement </th> <th > Evidence </th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <tr ng-class="{highlight : intervention0}">
+                                                                        <td > <input type="checkbox" ng-model="intervention0" > </td>
+                                                                        <td > {{interventions[0].service}}</td>
+                                                                        <td > {{interventions[0].description}}</td>
+                                                                        <td > {{interventions[0].probability  | toPercentage}}</td>
+                                                                        <td class="center">
+                                                                            <a class="grey" href="" ng-click="openEvidencePage()">
+                                                                                <i class="icon-file bigger-130"></i>
+                                                                            </a>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr ng-class="{highlight : intervention1}">
+                                                                        <td > <input type="checkbox" ng-model="intervention1" > </td>
+                                                                        <td > {{interventions[1].service}}</td>
+                                                                        <td > {{interventions[1].description}}</td>
+                                                                        <td > {{interventions[1].probability  | toPercentage}} </td>
+                                                                        <td class="center">
+                                                                            <a class="grey" href="" ng-click="openEvidencePage()">
+                                                                                <i class="icon-file bigger-130"></i>
+                                                                            </a>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr ng-class="{highlight : intervention2}">
+                                                                        <td > <input type="checkbox" ng-model="intervention2" > </td>
+                                                                        <td > {{interventions[2].service}} </td>
+                                                                        <td > {{interventions[2].description}}</td>
+                                                                        <td > {{interventions[2].probability  | toPercentage}}</td>
+                                                                        <td class="center">
+                                                                            <a class="grey" href="" ng-click="openEvidencePage()">
+                                                                                <i class="icon-file bigger-130"></i>
+                                                                            </a>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr ng-class="{highlight : intervention3}">
+                                                                        <td > <input type="checkbox" ng-model="intervention3" > </td>
+                                                                        <td > {{interventions[3].service}} </td>
+                                                                        <td > {{interventions[3].description}}</td>
+                                                                        <td > {{interventions[3].probability  | toPercentage}}</td>
+                                                                        <td class="center">
+                                                                            <a class="grey" href="" ng-click="openEvidencePage()">
+                                                                                <i class="icon-file bigger-130"></i>
+                                                                            </a>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr ng-class="{highlight : intervention4}" >
+                                                                        <td > <input type="checkbox" ng-model="intervention4" > </td>
+                                                                        <td > {{interventions[4].service}} </td>
+                                                                        <td > {{interventions[4].description}}</td>
+                                                                        <td > {{interventions[4].probability | toPercentage}} </td>
+                                                                        <td class="center">
+                                                                            <a class="grey" href="" ng-click="openEvidencePage()">
+                                                                                <i class="icon-file bigger-130"></i>
+                                                                            </a>
+                                                                        </td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-sm-4">
+                                                    <br/><br/>
+                                                    <div class="widget-box">
+                                                        <div class="widget-header">
+                                                            <h4>
+                                                                <i class="icon-pencil grey"></i>
+                                                                Note
+                                                            </h4>
+                                                        </div>
+                                                        <div class="widget-body">
+                                                            <div class="widget-main">
+                                                                <textarea class="form-control" ng-model="objectiveNote"  placeholder="Note ..."></textarea>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </div><!-- End interventions table-->
+
+                                        </div> <!-- End step 4 contents -->
+                                    </div>
+                            </div>
+                        </div>
+
+                    <hr/>
+                         <!-- Footer -->
+
+                        <div class="row-fluid wizard-actions">
+                            <button class="btn btn-prev" ng-click="handlePrevious()" ng-show="!isFirstStep()">
+                                <i class="icon-arrow-left"></i>
+                                Prev
+                            </button>
+
+                            <button class="btn btn-success btn-next" data-last="Finish " ng-click="handleNext()">
+                                {{getNextLabel()}}
+                                <i class="icon-arrow-right icon-on-right"></i>
+                            </button>
+                        </div>
+                </div>
+            <!-- /widget-main -->
+            </div>
+        <!-- /widget-body -->
+        </div>
+    </div>
+</div>
